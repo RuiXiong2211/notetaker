@@ -22,3 +22,5 @@ app.get('/', (req, res) => res.send('Hello World with Express'));
 app.listen(port, function () {
      console.log("Running backend on port " + port);
 });
+
+module.exports = app

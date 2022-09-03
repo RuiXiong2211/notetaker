@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Note = require('../models/note')
+const mongoose = require('mongoose')
 
 // get all
 router.get('/', async (req, res) =>  {
@@ -15,8 +16,9 @@ router.get('/', async (req, res) =>  {
 })
 
 // get one
-router.get('/:id', async (req, res) => {
-    res.send(req.params.id)
+router.get('/:id', getNote, async (req, res) => {
+    res.send(res.note)
+    // error handling in getNote() method.
 } )
 
 // creating one
@@ -36,14 +38,56 @@ router.post('/', async (req, res) => {
 } )
 
 // updating one
-router.patch('/:id', (req, res) => {
-    
+router.put('/:id', getNote, async (req, res) => {
+    if (req.body.description != null) {
+        res.note.description = req.body.description
+    }
+    try {
+        const updatedNote = await res.note.save()
+        res.json(updatedNote)
+    } catch (err) {
+        res.status(400).json({
+            message: err.message
+        })
+    }
 } )
 
 // delete one
-router.delete('/:id', (req, res) => {
-    
+router.delete('/:id', getNote, async (req, res) => {
+    try {
+        await res.note.remove()
+        res.json({
+            message: 'deleted note with id:' + res.note.id
+        })
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
 } )
+
+async function getNote(req, res, next) {
+    let note;
+    try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(404).json({
+                message: 'not a valid ID:' + req.params.id
+            })
+        }
+        note = await Note.findById(req.params.id)
+        if (note == null || note == undefined) {
+            return res.status(404).json({
+                message: 'Cannot find note with ID:' + req.params.id
+            })
+        }
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+    res.note = note
+    next()
+}
 
 
 module.exports = router
