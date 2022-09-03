@@ -87,53 +87,50 @@ describe("Test NoteAPI", () => {
         });
     });
   });
-});
 
-/* describe("Post Note", () => {
-  it("post a note", function (done) {
-    let note = {
-      description: "Hello World",
-    };
-    chai
-      .request(server)
-      .post("/note")
-      .send(note)
-      .end((err, res) => {
-        res.should.have.status(201);
-        expect(res.body.description).to.be.equal(note.description);
-        done(err);
+  /*
+   * Test the /PUT/:id route
+   */
+  describe("/PUT/:id note", () => {
+    it("it should UPDATE a note given the id", (done) => {
+      let note = new Note({
+        description: "notenote",
       });
+      note.save((err, note) => {
+        chai
+          .request(server)
+          .put("/note/" + note.id)
+          .send({
+            description: "Hello",
+          })
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a("object");
+            res.body.should.have.property("description").eql("Hello");
+            done();
+          });
+      });
+    });
+  });
+
+  /*
+   * Test the /DELETE/:id route
+   */
+  describe("/DELETE/:id note", () => {
+    it("it should DELETE a note given the id", (done) => {
+      let note = new Note({
+        description: "Balerion"
+      });
+      note.save((err, note) => {
+        chai
+          .request(server)
+          .delete("/note/" + note.id)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.have.property('message');
+            done();
+          });
+      });
+    });
   });
 });
-
-describe("Get All Notes", () => {
-  it("get all note", function (done) {
-    chai
-      .request(server)
-      .get("")
-      .end((err, res) => {
-        res.should.have.status(200);
-        done(err);
-      });
-  });
-});
-
-describe("Update Note", () => {
-  it("Updates the last note.", function (done) {
-    let note = {
-      description: "Hello",
-    };
-    let updatedNote = {
-      description: "World",
-    };
-    chai
-      .request(server)
-      .put("/note/" + id)
-      .send(note)
-      .end((err, res) => {
-        res.should.have.status(201);
-        expect(res.body.description).to.be.equal(updatedNote.description);
-        done(err);
-      });
-  });
-}); */
