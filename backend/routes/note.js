@@ -55,7 +55,7 @@ router.put('/:id', getNote, async (req, res) => {
 // delete one
 router.delete('/:id', getNote, async (req, res) => {
     try {
-        await res.note.remove()
+        await res.note.deleteOne()
         res.json({
             message: 'deleted note with id:' + res.note.id
         })
