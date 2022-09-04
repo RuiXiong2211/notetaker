@@ -5,6 +5,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../index");
 let Note = require("../models/note");
+let mongoose = require("mongoose");
 
 chai.should();
 
@@ -13,7 +14,14 @@ chai.use(chaiHttp);
 describe("Test NoteAPI", () => {
   beforeEach((done) => {
     //Before each test we empty the database
+    mongoose.connection.collections.notes.drop();
     Note.remove({}, (err) => {
+      done();
+    });
+  });
+
+  afterEach((done) => {
+    mongoose.connection.collections.notes.drop(() => {
       done();
     });
   });
@@ -119,7 +127,7 @@ describe("Test NoteAPI", () => {
   describe("/DELETE/:id note", () => {
     it("it should DELETE a note given the id", (done) => {
       let note = new Note({
-        description: "Balerion"
+        description: "Balerion",
       });
       note.save((err, note) => {
         chai
@@ -127,7 +135,7 @@ describe("Test NoteAPI", () => {
           .delete("/note/" + note.id)
           .end((err, res) => {
             res.should.have.status(200);
-            res.body.should.have.property('message');
+            res.body.should.have.property("message");
             done();
           });
       });
