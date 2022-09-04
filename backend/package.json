@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "devStart": "nodemon index.js",
-    "test": "npm install && mocha --exit"
+    "test": "mocha --exit"
   },
   "author": "",
   "license": "ISC",
