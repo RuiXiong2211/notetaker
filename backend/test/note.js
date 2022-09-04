@@ -19,16 +19,15 @@ describe("Test NoteAPI", () => {
     });
   });
 
-  afterEach((done) => {
+  afterEach(async() => {
     mongoose.connection.collections.notes.drop(() => {
-      done();
     });
   });
   /*
    * Test the /GET route
    */
   describe("/GET notes", () => {
-    it("it should GET all the notes", (done) => {
+    it("it should GET all the notes", async() => {
       chai
         .request(server)
         .get("/note")
@@ -36,7 +35,6 @@ describe("Test NoteAPI", () => {
           res.should.have.status(200);
           res.body.should.be.a("array");
           res.body.length.should.be.eql(0);
-          done();
         });
     });
   });
