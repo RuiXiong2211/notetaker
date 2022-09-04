@@ -1,23 +1,28 @@
 // credits https://www.digitalocean.com/community/tutorials/test-a-node-restful-api-with-mocha-and-chai
 
-const { expect } = require("chai");
 const chai = require("chai");
-const chaiHttp = require("chai-http");
+const expect = require("chai").expect;
 const server = require("../index");
 let Note = require("../models/note");
 let mongoose = require("mongoose");
+const request = require("supertest");
 
 chai.should();
 
-chai.use(chaiHttp);
-
 describe("Test NoteAPI", () => {
+  let note;
   beforeEach((done) => {
     //Before each test we empty the database
+    note = new Note({ description: "ligma" });
     mongoose.connection.collections.notes.drop();
-    Note.remove({}, (err) => {
-      done();
-    });
+    note
+      .save()
+      .then(() => {
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   afterEach((done) => {
@@ -30,13 +35,10 @@ describe("Test NoteAPI", () => {
    */
   describe("/GET notes", () => {
     it("it should GET all the notes", (done) => {
-      chai
-        .request(server)
+      request(server)
         .get("/note")
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a("array");
-          res.body.length.should.be.eql(0);
+        .then((res) => {
+          expect(res.status).equal(200);
           done();
         });
     });
@@ -44,20 +46,15 @@ describe("Test NoteAPI", () => {
 
   describe("/GET/:id note", () => {
     it("it should GET a note by the given id", (done) => {
-      let note = new Note({ description: "ligma" });
-      note.save((err, note) => {
-        chai
-          .request(server)
-          .get("/note/" + note.id)
-          .send(note)
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a("object");
-            res.body.should.have.property("description");
-            res.body.should.have.property("_id").eql(note.id);
-            done();
-          });
-      });
+      request(server)
+        .get(`/note/${note._id}`)
+        //.get("/note" + note.id)
+        .then((res) => {
+          const noteData = res.body;
+          expect(res.status).equal(200);
+          expect(noteData.description).equal(note.description)
+          done();
+        });
     });
   });
 
