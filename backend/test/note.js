@@ -11,12 +11,12 @@ chai.should();
 chai.use(chaiHttp);
 
 describe("Test NoteAPI", () => {
-  beforeEach((done) => {
-    //Before each test we empty the database
-    Note.remove({}, (err) => {
-      done();
-    });
-  });
+  // beforeEach((done) => {
+  //   //Before each test we empty the database
+  //   Note.remove({}, (err) => {
+  //     done();
+  //   });
+  // });
   /*
    * Test the /GET route
    */
