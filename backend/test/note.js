@@ -20,7 +20,8 @@ describe("Test NoteAPI", () => {
   });
 
   afterEach(async() => {
-    mongoose.connection.collections.notes.drop(() => {
+    mongoose.connection.collections.notes.drop();
+    Note.remove({}, (err) => {
     });
   });
   /*
@@ -40,7 +41,7 @@ describe("Test NoteAPI", () => {
   });
 
   describe("/GET/:id note", () => {
-    it("it should GET a note by the given id", (done) => {
+    it("it should GET a note by the given id", async() => {
       let note = new Note({ description: "ligma" });
       note.save((err, note) => {
         chai
@@ -52,7 +53,6 @@ describe("Test NoteAPI", () => {
             res.body.should.be.a("object");
             res.body.should.have.property("description");
             res.body.should.have.property("_id").eql(note.id);
-            done();
           });
       });
     });
@@ -62,7 +62,7 @@ describe("Test NoteAPI", () => {
    * Test the /POST route
    */
   describe("/POST note", () => {
-    it("it should not POST a note without a description field", (done) => {
+    it("it should not POST a note without a description field", async() => {
       let note = {};
       chai
         .request(server)
@@ -72,11 +72,10 @@ describe("Test NoteAPI", () => {
           res.should.have.status(400);
           res.body.should.be.a("object");
           res.body.should.have.property("message");
-          done();
         });
     });
 
-    it("it should POST a note ", (done) => {
+    it("it should POST a note ", async() => {
       let note = {
         description: "'Hello World",
       };
@@ -88,7 +87,6 @@ describe("Test NoteAPI", () => {
           res.should.have.status(201);
           res.body.should.be.a("object");
           res.body.should.have.property("description");
-          done();
         });
     });
   });
@@ -97,7 +95,7 @@ describe("Test NoteAPI", () => {
    * Test the /PUT/:id route
    */
   describe("/PUT/:id note", () => {
-    it("it should UPDATE a note given the id", (done) => {
+    it("it should UPDATE a note given the id", async() => {
       let note = new Note({
         description: "notenote",
       });
@@ -112,7 +110,6 @@ describe("Test NoteAPI", () => {
             res.should.have.status(200);
             res.body.should.be.a("object");
             res.body.should.have.property("description").eql("Hello");
-            done();
           });
       });
     });
@@ -122,7 +119,7 @@ describe("Test NoteAPI", () => {
    * Test the /DELETE/:id route
    */
   describe("/DELETE/:id note", () => {
-    it("it should DELETE a note given the id", (done) => {
+    it("it should DELETE a note given the id", async() => {
       let note = new Note({
         description: "Balerion",
       });
@@ -133,7 +130,6 @@ describe("Test NoteAPI", () => {
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property("message");
-            done();
           });
       });
     });
