@@ -4,7 +4,7 @@ const Note = require('../models/note')
 const mongoose = require('mongoose')
 
 // get all
-router.get('/', async (req, res) =>  {
+router.get('/note', async (req, res) =>  {
     try {
         const notes = await Note.find()
         res.json(notes)
@@ -16,13 +16,13 @@ router.get('/', async (req, res) =>  {
 })
 
 // get one
-router.get('/:id', getNote, async (req, res) => {
+router.get('/note/:id', getNote, async (req, res) => {
     res.send(res.note)
     // error handling in getNote() method.
 } )
 
 // creating one
-router.post('/', async (req, res) => {
+router.post('/note', async (req, res) => {
     const note = new Note({
         description: req.body.description,
         noteDate: req.body.noteDate
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
 } )
 
 // updating one
-router.put('/:id', getNote, async (req, res) => {
+router.put('/note/:id', getNote, async (req, res) => {
     if (req.body.description != null) {
         res.note.description = req.body.description
     }
@@ -53,7 +53,7 @@ router.put('/:id', getNote, async (req, res) => {
 } )
 
 // delete one
-router.delete('/:id', getNote, async (req, res) => {
+router.delete('/note/:id', getNote, async (req, res) => {
     try {
         await res.note.deleteOne()
         res.json({
