@@ -15,13 +15,13 @@ describe("Test NoteAPI", () => {
   beforeEach(async() => {
     //Before each test we empty the database
     mongoose.connection.collections.notes.drop();
-    Note.remove({}, (err) => {
+    Note.deleteMany({}, (err) => {
     });
   });
 
   afterEach(async() => {
     mongoose.connection.collections.notes.drop();
-    Note.remove({}, (err) => {
+    Note.deleteMany({}, (err) => {
     });
   });
   /*
