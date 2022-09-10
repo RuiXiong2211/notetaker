@@ -12,18 +12,6 @@ chai.should();
 chai.use(chaiHttp);
 
 describe("Test NoteAPI", () => {
-  beforeEach(async() => {
-    //Before each test we empty the database
-    mongoose.connection.collections.notes.drop();
-    Note.deleteMany({}, (err) => {
-    });
-  });
-
-  afterEach(async() => {
-    mongoose.connection.collections.notes.drop();
-    Note.deleteMany({}, (err) => {
-    });
-  });
   /*
    * Test the /GET route
    */
@@ -31,7 +19,7 @@ describe("Test NoteAPI", () => {
     it("it should GET all the notes", async() => {
       chai
         .request(server)
-        .get("/note")
+        .get("/api/note")
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("array");
@@ -46,7 +34,7 @@ describe("Test NoteAPI", () => {
       note.save((err, note) => {
         chai
           .request(server)
-          .get("/note/" + note.id)
+          .get("/api/note/" + note.id)
           .send(note)
           .end((err, res) => {
             res.should.have.status(200);
@@ -66,7 +54,7 @@ describe("Test NoteAPI", () => {
       let note = {};
       chai
         .request(server)
-        .post("/note")
+        .post("/api/note")
         .send(note)
         .end((err, res) => {
           res.should.have.status(400);
@@ -81,7 +69,7 @@ describe("Test NoteAPI", () => {
       };
       chai
         .request(server)
-        .post("/note")
+        .post("/api/note")
         .send(note)
         .end((err, res) => {
           res.should.have.status(201);
@@ -102,7 +90,7 @@ describe("Test NoteAPI", () => {
       note.save((err, note) => {
         chai
           .request(server)
-          .put("/note/" + note.id)
+          .put("/api/note/" + note.id)
           .send({
             description: "Hello",
           })
@@ -126,7 +114,7 @@ describe("Test NoteAPI", () => {
       note.save((err, note) => {
         chai
           .request(server)
-          .delete("/note/" + note.id)
+          .delete("/api/note/" + note.id)
           .end((err, res) => {
             res.should.have.status(200);
             res.body.should.have.property("message");
