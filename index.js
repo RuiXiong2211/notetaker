@@ -16,11 +16,11 @@ app.use(express.json())
 const noteRouter = require('./routes/note')
 app.use('/note', noteRouter)
 // Setup server port
-let port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 // Send message for default URL
 app.get('/', (req, res) => res.send('Hello World with Express@'));
 // Launch app to listen to specified port
-app.listen(port, function () {
+app.listen(PORT, function () {
      console.log("Running backend on port " + port);
 });
 
