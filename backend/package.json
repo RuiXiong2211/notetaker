@@ -4,7 +4,7 @@
   "description": "An rest api app for note taking",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon app.js",
     "test": "mocha --exit"
   },
   "author": "",
