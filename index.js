@@ -4,7 +4,9 @@ let express = require('express')
 // Initialize the app
 let app = express();
 const mongoose = require('mongoose')
-mongoose.connect("mongodb://localhost/notes")
+//mongoose.connect("mongodb://localhost/notes")
+mongoose.connect("mongodb://127.0.0.1/notes")
+
 const db = mongoose.connection
 db.on('error', (error) => console.error(error))
 db.once('open', () => console.log('Connected to Database'))
