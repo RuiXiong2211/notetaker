@@ -2,7 +2,6 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "An rest api app for note taking",
-  "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
     "test": "mocha --exit"
