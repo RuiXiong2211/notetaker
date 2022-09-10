@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "An rest api app for note taking",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon index.js",
     "test": "mocha --exit"
   },
   "author": "",
