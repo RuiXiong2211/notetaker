@@ -3,6 +3,8 @@
 let express = require("express");
 // Initialize the app
 let app = express();
+const cors = require('cors')
+
 const mongoose = require("mongoose");
 //mongoose.connect("mongodb://localhost/notes")
 //mongoose.connect("mongodb://127.0.0.1/notes")
@@ -25,6 +27,7 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Database"));
 
 app.use(express.json());
+app.use(cors())
 
 const noteRouter = require("./routes/note");
 app.use("/api", noteRouter);
