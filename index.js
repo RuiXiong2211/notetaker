@@ -31,7 +31,7 @@ app.use("/api", noteRouter);
 // Setup server port
 const PORT = process.env.PORT || 3000;
 // Send message for default URL
-app.get("/", (req, res) => res.send("Hello World with Express@"));
+app.get("/", (req, res) => res.send("Hello World with Express@!"));
 // Launch app to listen to specified port
 app.listen(PORT, function () {
   console.log("Running backend on port " + PORT);
