@@ -1,4 +1,5 @@
 // FileName: index.js
+require('dotenv').config()
 // Import express
 let express = require("express");
 // Initialize the app
@@ -10,7 +11,7 @@ const mongoose = require("mongoose");
 //mongoose.connect("mongodb://127.0.0.1/notes")
 mongoose
   .connect(
-    "mongodb+srv://ilovecheese:yesido@cluster0.cuscu61.mongodb.net/?retryWrites=true&w=majority",
+    process.env.MONGODB_URL,
     {
      useNewUrlParser: true,
    }

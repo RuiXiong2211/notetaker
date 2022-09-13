@@ -12,6 +12,18 @@ chai.should();
 chai.use(chaiHttp);
 
 describe("Test NoteAPI", () => {
+  beforeEach(async() => {
+    //Before each test we empty the database
+    mongoose.connection.collections.notes.drop();
+    Note.deleteMany({}, (err) => {
+    });
+  });
+
+  afterEach(async() => {
+    mongoose.connection.collections.notes.drop();
+    Note.deleteMany({}, (err) => {
+    });
+  });
   /*
    * Test the /GET route
    */

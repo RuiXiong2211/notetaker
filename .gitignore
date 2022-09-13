@@ -1,5 +1,4 @@
-#.env is not ignored to allow testing for marker
-#.env
+.env
 node_modules
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
