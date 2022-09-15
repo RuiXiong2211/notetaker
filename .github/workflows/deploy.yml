@@ -54,7 +54,7 @@ jobs:
         aws_secret_key: ${{secrets.AWS_SECRET_KEY}}
         application_name: test
         environment_name: Test.env
-        region: <aws_region>
+        region: ap-southeast-1
         version_label: "my-app-${{ steps.format-time.outputs.replaced }}"
         deployment_package: deploy.zip
 
