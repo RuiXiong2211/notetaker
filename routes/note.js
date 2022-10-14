@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const Note = require('../models/note')
 const mongoose = require('mongoose')
-const authenticateToken = require('../auth/auth')
+const auth = require('../auth/auth')
 // get all
-router.get('/note', authenticateToken, async (req, res) =>  {
+router.get('/note', auth.authenticateToken, auth.verifyAdmin, async (req, res) =>  {
     try {
         const notes = await Note.find()
         res.json(notes)

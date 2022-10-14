@@ -11,7 +11,8 @@ router.post('/user', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const user = new User({
             username: req.body.username,
-            password: hashedPassword
+            password: hashedPassword,
+            role: req.body.role
         })
         const newUser = await user.save();
         res.status(201).json(newUser)
@@ -26,20 +27,33 @@ router.post('/user/login', async (req, res) => {
         username: req.body.username
     })
     if (user == null) {
-      return res.status(400).send('Cannot find user')
+      return res.status(404).send({
+        authenticated: false,
+        token: null,
+        message: "Invalid Username"
+    })
     }
     try {
       if(await bcrypt.compare(req.body.password, user.password)) {
-        const userName = {
-            name: req.body.username
-        }
-        const accessToken = jwt.sign(userName, process.env.ACCESS_TOKEN_SECRET)
+        const accessToken = jwt.sign(
+            {
+                user: user.username,
+                role: user.role
+            }, 
+            process.env.ACCESS_TOKEN_SECRET, 
+            { expiresIn: "24h"})
         console.log(accessToken)
         res.status(200).json({
+            authenticated: true,
+            message: "Login success",
             accessToken: accessToken
         })
       } else {
-        res.status(401).send('Wrong Password')
+        res.status(401).send({
+            authenticated: false,
+            message: "Login failed",
+            accessToken: null
+        })
       }
     } catch (err) {
       console.log(err)

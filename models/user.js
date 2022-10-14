@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { ROLE } = require("../const/userRole");
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -9,6 +10,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    role: {
+        type: String,
+        enum: ROLE,
+        default: ROLE.USER
     }
 })
 
