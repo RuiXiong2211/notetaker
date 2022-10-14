@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 //mongoose.connect("mongodb://127.0.0.1/notes")
 mongoose
   .connect(
-    process.env.MONGODB_URL,
+    process.env.LOCAL_DATABASE_URL,
     {
      useNewUrlParser: true,
    }
@@ -31,7 +31,10 @@ app.use(express.json());
 app.use(cors())
 
 const noteRouter = require("./routes/note");
+const userRouter = require("./routes/user");
+
 app.use("/api", noteRouter);
+app.use("/api", userRouter);
 // Setup server port
 const PORT = process.env.PORT || 3000;
 // Send message for default URL
