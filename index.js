@@ -11,7 +11,7 @@ const mongoose = require("mongoose");
 //mongoose.connect("mongodb://127.0.0.1/notes")
 mongoose
   .connect(
-    process.env.MONGODB_URL,
+    process.env.LOCAL_DATABASE_URL,
     {
      useNewUrlParser: true,
    }

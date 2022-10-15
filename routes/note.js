@@ -2,12 +2,30 @@ const express = require('express')
 const router = express.Router()
 const Note = require('../models/note')
 const mongoose = require('mongoose')
+const Redis = require('ioredis')
+const DEFAULT_EXPIRATION = 3600
+
+const redisKey = "notes"
+const redisClient =  new Redis()
+
+// redisClient.connect().then(() => {
+//     console.log("redis connected")
+// })
+
+//await redisClient.connect()
 
 // get all
 router.get('/note', async (req, res) =>  {
     try {
-        const notes = await Note.find()
-        res.json(notes)
+        const cacheData = await getCache(redisKey)
+        if (cacheData === undefined) {
+            const notes = await Note.find()
+            await setCache(redisKey, JSON.stringify(notes))
+            res.json(notes)
+        } else {
+            res.json(cacheData)
+        }
+        //const notes = await Note.find()
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -87,6 +105,42 @@ async function getNote(req, res, next) {
     }
     res.note = note
     next()
+}
+
+// function getOrSetCache(key, cb) {
+//     return new Promise((resolve, reject) => {
+//         redisClient.get(key, async(error, data) => {
+//             console.log("enter method")
+//             if (error) {
+//                 console.log(error)
+//                 return reject(error)
+//             }
+//             if (data != null) {
+//                 return resolve(JSON.parse(data))
+//             }
+//             const freshData = await cb()
+//             redisClient.setEx(key, DEFAULT_EXPIRATION, freshData)
+//         })
+//     })
+// }
+
+async function getCache(key) {
+    let note = undefined;
+        await redisClient.get(key, (err, result) => {
+        if (err) {
+            console.log(err)
+        }
+        //console.log("key is", key)
+        //console.log("data is", result)
+        if (result) {
+            note = result
+        }
+    })
+    return note;
+}
+
+async function setCache(key, value) {
+    await redisClient.set(key, value)
 }
 
 
