@@ -20,7 +20,8 @@ function authenticateToken(req, res, next) {
 
 function verifyAdmin(req, res, next) {
     const role = req.user.role
-    if (role.toLowerCase() !== ROLE.ADMIN) {
+    const admins = [ROLE.ADMIN]
+    if (!admins.includes(role)) {
         return res.sendStatus(403)
     }
     next();
